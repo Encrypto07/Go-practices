@@ -8,7 +8,9 @@ import (
 
 func main() {
 	var wg sync.WaitGroup
+	defer wg.Wait()
 	ch1 := make(chan string)
+	ch2 := make(chan string)
 
 	wg.Add(2)
 	go print1(ch1, &wg)
@@ -16,12 +18,11 @@ func main() {
 		fmt.Println(v)
 	}
 
-	ch2 := make(chan string)
 	go print2(ch2, &wg)
 	for v := range ch2 {
 		fmt.Println(v)
 	}
-	wg.Wait()
+
 }
 
 func print1(c chan<- string, wg *sync.WaitGroup) {
